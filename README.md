@@ -54,7 +54,7 @@ Describe the major technical or non-technical challenges your team encountered.
 - 🔹 Backend: Python,Pyspark
 - 🔹 Database: Vector DB
 - 🔹 Other: OpenAI API / Twilio / Stripe
-- 🔹 Other: ALS model for data training
+- 🔹 Other: ALS model for data training,Python NLP Lib
 
 ## 👥 Team
 sunkara srikant
