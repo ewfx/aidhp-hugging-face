@@ -1,0 +1,54 @@
+import pandas as pd
+import numpy as np
+import random
+!pip install faker
+from faker import Faker
+
+
+fake = Faker()
+
+def generate_customer_data(num_records=5000):
+    """Generates customer data and returns it as a pandas DataFrame."""
+
+    data = {
+        'CustomerID': range(1, num_records + 1),
+        'FirstName': [fake.first_name() for _ in range(num_records)],
+        'LastName': [fake.last_name() for _ in range(num_records)],
+        'Email': [fake.email() for _ in range(num_records)],
+        'Phone': [fake.phone_number() for _ in range(num_records)],
+        'Address': [fake.street_address() for _ in range(num_records)],
+        'City': [fake.city() for _ in range(num_records)],
+        'State': [fake.state_abbr() for _ in range(num_records)],
+        'ZipCode': [fake.zipcode() for _ in range(num_records)],
+        'Country': ['USA'] * num_records,
+        'BirthDate': [fake.date_between(start_date='-65y', end_date='-18y') for _ in range(num_records)],
+        'RegistrationDate': [fake.date_between(start_date='-1y', end_date='today') for _ in range(num_records)],
+        # Initialize LastPurchaseDate with a list of None or any placeholder of the correct length
+        'LastPurchaseDate': [None] * num_records,  
+        'TotalPurchases': [random.randint(1, 20) for _ in range(num_records)],
+        'AveragePurchaseValue': [round(random.uniform(20, 200), 2) for _ in range(num_records)],
+        'PreferredCategory': [random.choice(['Electronics', 'Clothing', 'Home & Garden', 'Books', 'Toys', 'Other']) for _ in range(num_records)],
+        'CustomerStatus': [random.choice(['Active', 'Inactive', 'New']) for _ in range(num_records)],
+        'LoyaltyPoints': [random.randint(0, 500) for _ in range(num_records)],
+        'ReferralSource': [random.choice(['Website', 'Social Media', 'Email', 'Referral', 'Other']) for _ in range(num_records)],
+    }
+
+    df = pd.DataFrame(data)
+
+    # Generate realistic LastPurchaseDate, making sure it's after RegistrationDate
+    last_purchase_dates = []
+    for reg_date in df['RegistrationDate']:
+      last_purchase_dates.append(fake.date_between(start_date=reg_date, end_date='today'))
+
+    df['LastPurchaseDate'] = last_purchase_dates
+
+    return df
+
+def save_to_excel(df, filename='customer_data.xlsx'):
+    """Saves the DataFrame to an Excel file."""
+    df.to_excel(filename, index=False)
+    print(f"Data saved to {filename}")
+
+if __name__ == "__main__":
+    customer_df = generate_customer_data()
+    save_to_excel(customer_df)
